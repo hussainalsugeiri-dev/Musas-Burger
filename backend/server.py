@@ -112,7 +112,7 @@ def calculate_totals(items: List[OrderItem], order_type: str) -> Dict[str, float
     return {"subtotal": round(subtotal, 2), "delivery_fee": delivery_fee, "total": round(subtotal + delivery_fee, 2)}
 
 
-MENU_VERSION = "v4_real_menu_verified_burger_images"
+MENU_VERSION = "v8_chicken_final"
 
 
 async def seed_menu():
@@ -132,8 +132,8 @@ async def seed_menu():
     BEEF_IMG_7 = "https://images.unsplash.com/photo-1550317138-10000687a72b?crop=entropy&cs=srgb&fm=jpg&q=85"
     BEEF_IMG_8 = "https://images.unsplash.com/photo-1607013251379-e6eecfffe234?crop=entropy&cs=srgb&fm=jpg&q=85"
     CHICKEN_IMG = "https://images.unsplash.com/photo-1606755962773-d324e0a13086?crop=entropy&cs=srgb&fm=jpg&q=85"
-    CHICKEN_IMG_2 = "https://images.unsplash.com/photo-1671292747854-c56be83025df?crop=entropy&cs=srgb&fm=jpg&q=85"
-    CHICKEN_IMG_3 = "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?crop=entropy&cs=srgb&fm=jpg&q=85"
+    CHICKEN_IMG_2 = "https://images.unsplash.com/photo-1637710847214-f91d99669e18?crop=entropy&cs=srgb&fm=jpg&q=85"
+    CHICKEN_IMG_3 = "https://images.unsplash.com/photo-1671106571674-a89083d27e60?crop=entropy&cs=srgb&fm=jpg&q=85"
     VEGGIE_IMG = "https://images.unsplash.com/photo-1585238342024-78d387f4a707?crop=entropy&cs=srgb&fm=jpg&q=85"
     VEGGIE_IMG_2 = "https://images.unsplash.com/photo-1520072959219-c595dc870360?crop=entropy&cs=srgb&fm=jpg&q=85"
     DREH_IMG = "https://images.unsplash.com/photo-1633321702518-7feccafb94d5?crop=entropy&cs=srgb&fm=jpg&q=85"
