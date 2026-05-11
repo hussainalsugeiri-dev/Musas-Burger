@@ -1,0 +1,67 @@
+{
+  "summary": "Backend testing of Musa's Burger API. 23/24 pytest tests passed. All menu CRUD, order creation w/ price-manipulation protection, delivery fee logic (delivery/contactless <25 -> 2.50, pickup/>=25 -> 0), order status updates, Stripe checkout session creation, and webhook endpoint are working correctly. MongoDB _id is properly excluded. One real bug found: GET /api/payments/checkout/status/{session_id} returns unhandled 500 for freshly-created sessions.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "GET /api/payments/checkout/status/{session_id}",
+        "issue": "Returns unhandled HTTP 500 Internal Server Error when querying status of a session that was just created via POST /api/payments/checkout/session or via POST /api/orders (stripe). The emergentintegrations SDK raises CheckoutError('No such checkout.session: cs_test_...') and the endpoint does NOT catch it. Reproduces 100% (3/3 attempts, even with 8s delay). Frontend success page will break when polling for payment status.",
+        "priority": "HIGH"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "POST /api/orders (validation)",
+        "issue": "Pydantic OrderCreate has no min-length on items list. Empty items array will pass validation, produce subtotal=0, and create a 0-EUR order. Recommend rejecting empty items."
+      },
+      {
+        "endpoint": "POST /api/orders (delivery)",
+        "issue": "When order_type='delivery', delivery_address is Optional and not enforced. Server accepts delivery orders with no address."
+      },
+      {
+        "endpoint": "PUT /api/orders/{id}/status",
+        "issue": "Status is passed via query string (?status=...) instead of request body. Works, but not RESTful and harder for frontend to use."
+      },
+      {
+        "endpoint": "POST /api/webhook/stripe",
+        "issue": "On bad signature, endpoint returns HTTP 200 with {received: false, error: ...}. Stripe expects 400 on invalid signatures so it knows to retry / mark events appropriately."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_musas_burger_api.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "CRITICAL: Wrap stripe_checkout.get_checkout_status() in try/except in get_checkout_status() (line 612 of server.py). Return 404 if 'No such checkout.session' or 502 for upstream Stripe errors instead of 500. This is blocking the post-payment success flow.",
+    "Investigate why emergentintegrations cannot retrieve sessions it just created with sk_test_emergent — may be SDK/key configuration issue (Stripe key used for status differs from creation, or test account context). Verify with the emergentintegrations team if needed.",
+    "Add items min_length=1 validation on OrderCreate model.",
+    "Enforce delivery_address when order_type=='delivery'.",
+    "Consider returning 400 from /api/webhook/stripe on signature failures (Stripe best practice)."
+  ],
+  "critical_code_review_comments": [
+    "server.py is 690 lines — consider splitting into routers/menu.py, routers/orders.py, routers/payments.py, models.py for maintainability.",
+    "Duplicate Stripe checkout-creation logic exists in POST /api/orders and POST /api/payments/checkout/session — extract into a helper to avoid drift.",
+    "No authentication/authorization on admin endpoints (POST/PUT/DELETE /api/menu, PUT /api/orders/{id}/status, GET /api/orders). Anyone can mutate menu, view all customer orders, change order statuses. Must be protected before production.",
+    "No rate limiting on POST /api/orders — could be abused to create unlimited Stripe sessions.",
+    "Webhook endpoint catches all exceptions and returns 200 — silently swallows real errors.",
+    "STRIPE_API_KEY has a hardcoded default 'sk_test_emergent' (line 28). Should fail fast if missing.",
+    "datetime stored as ISO string — works but loses query-by-date efficiency. Consider native datetime.",
+    "No index on db.orders.created_at, db.menu_items.id, db.payment_transactions.session_id — will degrade at scale.",
+    "No DSGVO/GDPR-related endpoints (data export/delete-customer) despite requirement; only order storage is implemented."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_musas_burger_api.py (new test file, 24 tests)"
+  ],
+  "success_rate": {"backend": "96% (23/24, 1 skipped due to known Stripe status bug)", "frontend": "not_tested"},
+  "test_credentials": "None required — no auth in API.",
+  "seed_data_creation": "No additional seed needed; backend auto-seeds 61 menu items on startup (MENU_VERSION='v3_real_menu_fixed_images'). Tests create temporary orders and one TEST_ menu item that is cleaned up.",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Test file at /app/backend/tests/test_musas_burger_api.py covers menu CRUD, order creation/validation/totals/delivery fee, status updates, Stripe checkout session creation, and webhook endpoint. The 1 skipped test (TestPayments::test_checkout_status_lookup) is intentionally skipped via pytest.skip when the upstream Stripe status call 500s; once the status endpoint is fixed (try/except in server.py:612), this test will exercise the happy path. Run: `pytest /app/backend/tests/test_musas_burger_api.py -v`. External URL used: https://frisch-vom-grill.preview.emergentagent.com.",
+  "rca_of_the_issue": "RCA for /api/payments/checkout/status/{session_id} 500: server.py line 612 calls `await stripe_checkout.get_checkout_status(session_id)` without try/except. The emergentintegrations SDK raises CheckoutError('Failed to retrieve session status: No such checkout.session: cs_test_...') even for sessions just successfully created via /api/payments/checkout/session (URL is valid and opens Stripe checkout). Reproduces 100% with 8s delay too. Mitigation: (1) wrap call in try/except CheckoutError -> return 502/404 with structured error JSON, (2) investigate emergentintegrations + sk_test_emergent key — possibly the SDK uses a different Stripe account/key for status retrieval than creation. Reproduction: POST /api/payments/checkout/session with valid order_id -> get session_id -> GET /api/payments/checkout/status/{session_id} -> 500."
+}
