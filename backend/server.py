@@ -483,6 +483,12 @@ async def delete_menu_item(item_id: str):
 # ============ ORDER ENDPOINTS ============
 @api_router.post("/orders", response_model=Order)
 async def create_order(payload: OrderCreate, http_request: Request):
+    # Validate items
+    if not payload.items or len(payload.items) == 0:
+        raise HTTPException(status_code=400, detail="Order must contain at least one item")
+    # Validate delivery requires address
+    if payload.order_type in ("delivery", "contactless") and not payload.delivery_address:
+        raise HTTPException(status_code=400, detail="Delivery address is required for delivery orders")
     # Validate items against DB to prevent price manipulation
     validated_items: List[OrderItem] = []
     for it in payload.items:
@@ -609,7 +615,21 @@ async def get_checkout_status(session_id: str, http_request: Request):
     host_url = str(http_request.base_url).rstrip("/")
     webhook_url = f"{host_url}/api/webhook/stripe"
     stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
-    status: CheckoutStatusResponse = await stripe_checkout.get_checkout_status(session_id)
+    try:
+        status: CheckoutStatusResponse = await stripe_checkout.get_checkout_status(session_id)
+    except Exception as e:
+        logger.warning(f"Stripe status lookup failed for {session_id}: {e}")
+        # Fallback: read our local transaction record
+        tx = await db.payment_transactions.find_one({"session_id": session_id}, {"_id": 0})
+        if not tx:
+            raise HTTPException(status_code=404, detail="Session not found")
+        return {
+            "status": tx.get("status", "open"),
+            "payment_status": tx.get("payment_status", "pending"),
+            "amount_total": int(round(float(tx.get("amount", 0)) * 100)),
+            "currency": tx.get("currency", "eur"),
+            "metadata": tx.get("metadata", {}),
+        }
     # Idempotent update
     tx = await db.payment_transactions.find_one({"session_id": session_id}, {"_id": 0})
     if tx and tx.get("payment_status") != "paid" and status.payment_status == "paid":
