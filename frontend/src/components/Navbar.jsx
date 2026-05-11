@@ -42,7 +42,7 @@ const Navbar = () => {
           </span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-8 ml-12 lg:ml-20">
           <button onClick={() => goSection("menu")} className="text-sm font-semibold hover:text-[#F5A623] transition-colors uppercase tracking-wide" data-testid="nav-menu-btn">{t("nav_menu")}</button>
           <button onClick={() => goSection("order")} className="text-sm font-semibold hover:text-[#F5A623] transition-colors uppercase tracking-wide" data-testid="nav-order-btn">{t("nav_order")}</button>
           <button onClick={() => goSection("trust")} className="text-sm font-semibold hover:text-[#F5A623] transition-colors uppercase tracking-wide" data-testid="nav-about-btn">{t("nav_about")}</button>
