@@ -112,7 +112,7 @@ def calculate_totals(items: List[OrderItem], order_type: str) -> Dict[str, float
     return {"subtotal": round(subtotal, 2), "delivery_fee": delivery_fee, "total": round(subtotal + delivery_fee, 2)}
 
 
-MENU_VERSION = "v3_real_menu_fixed_images"
+MENU_VERSION = "v4_real_menu_verified_burger_images"
 
 
 async def seed_menu():
@@ -123,7 +123,7 @@ async def seed_menu():
     # Drop and reseed
     await db.menu_items.delete_many({})
 
-    BEEF_IMG_1 = "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?crop=entropy&cs=srgb&fm=jpg&q=85"
+    BEEF_IMG_1 = "https://images.unsplash.com/photo-1571091718767-18b5b1457add?crop=entropy&cs=srgb&fm=jpg&q=85"
     BEEF_IMG_2 = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?crop=entropy&cs=srgb&fm=jpg&q=85"
     BEEF_IMG_3 = "https://images.pexels.com/photos/12325012/pexels-photo-12325012.jpeg"
     BEEF_IMG_4 = "https://images.unsplash.com/photo-1551782450-a2132b4ba21d?crop=entropy&cs=srgb&fm=jpg&q=85"
