@@ -1,0 +1,143 @@
+{
+  "theme": "dark",
+  "archetype": "Archetype 5: Jewel & Luxury (Urban Moody Variant)",
+  "brand": {
+    "name": "Musa's Burger",
+    "address": "Schwanthalerstraße 126, 80339 München",
+    "phone": "089 32741934",
+    "rating": "4.2",
+    "reviews": 17,
+    "services": ["Zum Mitnehmen", "Kontaktlose Lieferung", "Online bestellen"],
+    "hours": "Schließt um 04:00 Uhr"
+  },
+  "colors": {
+    "background_base": "#0A0A0A",
+    "background_surface": "#141414",
+    "background_glass": "rgba(20, 20, 20, 0.7)",
+    "primary_accent": "#F5A623",
+    "primary_accent_hover": "#DFA000",
+    "secondary_accent": "#E02424",
+    "text_primary": "#FFFFFF",
+    "text_secondary": "#A3A3A3",
+    "border_subtle": "rgba(255, 255, 255, 0.1)",
+    "border_highlight": "rgba(245, 166, 35, 0.5)"
+  },
+  "typography": {
+    "headings": {
+      "font_family": "Cabinet Grotesk, sans-serif",
+      "weight": "800",
+      "letter_spacing": "tracking-tight",
+      "case": "uppercase or natural (depending on hierarchy)"
+    },
+    "body": {
+      "font_family": "Manrope, sans-serif",
+      "weight": "400",
+      "letter_spacing": "tracking-normal",
+      "line_height": "leading-relaxed"
+    },
+    "hierarchy": {
+      "h1": "text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter text-white",
+      "h2": "text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white",
+      "h3": "text-xl md:text-2xl font-bold text-white",
+      "p": "text-base md:text-lg text-[#A3A3A3]"
+    }
+  },
+  "layout_and_spacing": {
+    "philosophy": "Generous spacing (p-8 to p-16), aggressive asymmetry in hero sections, tight and dense Bento grids for menu items.",
+    "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+    "section_spacing": "py-20 md:py-32",
+    "bento_grid": "grid grid-cols-1 md:grid-cols-12 gap-6",
+    "card_styling": "bg-[#141414] border border-white/10 rounded-2xl p-6 transition-all duration-300 hover:border-[#F5A623]/50 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(245,166,35,0.1)]",
+    "glass_surface": "backdrop-blur-xl bg-[#0A0A0A]/80 border border-white/10"
+  },
+  "components": {
+    "navigation": {
+      "style": "Fixed top, glassmorphism surface, z-50",
+      "elements": "Brand Logo, Links (Menu, Trust, Location), Language Switcher (DE/EN), Cart Icon with Badge",
+      "mobile": "Hamburger menu, solid dark background sheet"
+    },
+    "hero": {
+      "layout": "Asymmetric split or text overlaid on highly cinematic darkened image background (bg-black/60).",
+      "ctas": {
+        "primary": "bg-[#F5A623] text-black font-bold px-8 py-4 rounded-full hover:bg-[#DFA000] transition-colors",
+        "secondary": "border border-white/20 text-white font-bold px-8 py-4 rounded-full hover:bg-white hover:text-black transition-colors"
+      }
+    },
+    "menu_section": {
+      "categories": ["Beef", "Chicken", "Veggie", "Menüs", "Beilagen", "Getränke"],
+      "item_card": "Vertical layout, high-quality image on top (max-h-48 object-cover rounded-t-xl), bold title, description, ingredients list (text-sm text-zinc-500), price tag (text-[#F5A623]), 'Add to Cart' button (icon or full width)"
+    },
+    "order_system": {
+      "toggle": "Segmented control (Delivery / Pickup / Contactless) - Shadcn Tabs",
+      "cart": "Slide-out Sheet (Shadcn Sheet) showing selected items, extras, total, and Checkout button",
+      "checkout": "Integrated Stripe flow (mocked visually or basic form)"
+    },
+    "trust_section": {
+      "style": "Dark textured background (restaurant vibe), large '4.2' typography in gold, 5 stars (4 filled, 1 half), 'Warum Musa's Burger?' value props (Local, Authentic, Late Night).",
+      "metrics": "17 Reviews"
+    },
+    "location_section": {
+      "layout": "Split: Left side details (Address, Phone, Hours), Right side Map Placeholder (dark themed static image or gray box with 'Map Area' for integration)."
+    },
+    "mobile_specific": {
+      "sticky_order_button": "Fixed to bottom of viewport on mobile (z-40), full width, highly visible #F5A623 background, text 'Jetzt bestellen'."
+    },
+    "admin_dashboard": {
+      "style": "Dense, technical grid (Archetype 4 structural), Shadcn UI elements, dark theme.",
+      "features": "Orders list, Menu item management (CRUD), toggle store status."
+    },
+    "legal": {
+      "cookie_banner": "Fixed bottom right, glassmorphism, compact.",
+      "footer_links": "Impressum, Datenschutz"
+    }
+  },
+  "media": {
+    "image_urls": {
+      "hero_burger": {
+        "url": "https://images.pexels.com/photos/12325012/pexels-photo-12325012.jpeg",
+        "description": "Delicious gourmet cheeseburger with fresh arugula. Use as main hero background with dark overlay or standalone feature image.",
+        "category": "hero"
+      },
+      "beef_burger": {
+        "url": "https://images.unsplash.com/photo-1611309454921-16cef3438ee0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1Mjh8MHwxfHNlYXJjaHwzfHxnb3VybWV0JTIwYnVyZ2VyJTIwZGFyayUyMGJhY2tncm91bmR8ZW58MHx8fHwxNzc4MzY1MjM5fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Beef burger with lettuce and tomato on dark background",
+        "category": "menu_item"
+      },
+      "chicken_burger": {
+        "url": "https://images.unsplash.com/photo-1671292747854-c56be83025df?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwzfHxjaGlja2VuJTIwYnVyZ2VyJTIwZGFya3xlbnwwfHx8fDE3Nzg1MjY2MDR8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Chicken burger with lettuce and mayo",
+        "category": "menu_item"
+      },
+      "veggie_burger": {
+        "url": "https://images.pexels.com/photos/14935009/pexels-photo-14935009.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "description": "Floating deconstructed burger ingredients (use for veggie or general category)",
+        "category": "menu_item"
+      },
+      "fries": {
+        "url": "https://images.pexels.com/photos/31806278/pexels-photo-31806278.jpeg",
+        "description": "Plate of crispy fries",
+        "category": "menu_item"
+      },
+      "restaurant_vibe": {
+        "url": "https://images.unsplash.com/photo-1770629681079-86c4d2adb83f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1Mjh8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjByZXN0YXVyYW50JTIwaW50ZXJpb3IlMjBuaWdodHxlbnwwfHx8fDE3Nzg1MjY2MDR8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Modern restaurant interior with checkered floor and neon signs. Use for Trust section background.",
+        "category": "background"
+      }
+    }
+  },
+  "icons": {
+    "library": "lucide-react",
+    "instructions": "Use Lucide React for UI actions. Use highly contrasted icons for features."
+  },
+  "instructions_to_main_agent": [
+    "Use standard HTML + Tailwind for marketing/landing page sections to achieve organic, non-generic layouts.",
+    "Use Shadcn UI primarily for interactive logic (Tabs, Cart Sheet, Admin Tables, Dialogs).",
+    "Apply 'dark' class to html/body globally to ensure dark mode.",
+    "Implement the 'Jetzt bestellen' sticky mobile button dynamically, hiding it on larger screens.",
+    "Ensure the hero image has an overlay like bg-black/50 or a gradient overlay so text remains legible.",
+    "All interactive elements must have a data-testid attribute.",
+    "Build the Admin Dashboard with Shadcn components, focusing on density and function.",
+    "Implement language switcher (DE/EN) using a simple context or state, toggling static strings.",
+    "DO NOT use placeholder text for images. Use the provided media URLs."
+  ]
+}
