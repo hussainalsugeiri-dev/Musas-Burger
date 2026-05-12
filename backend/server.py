@@ -112,7 +112,7 @@ def calculate_totals(items: List[OrderItem], order_type: str) -> Dict[str, float
     return {"subtotal": round(subtotal, 2), "delivery_fee": delivery_fee, "total": round(subtotal + delivery_fee, 2)}
 
 
-MENU_VERSION = "v11_doner_user_uploaded"
+MENU_VERSION = "v12_doner_swap_fix"
 
 
 async def seed_menu():
@@ -302,12 +302,12 @@ async def seed_menu():
          "description_de": "Drehspießfleisch im frischen Fladenbrot.",
          "description_en": "Rotisserie meat in fresh flatbread.",
          "ingredients": ["Drehspießfleisch", "Salat", "Tomaten", "Zwiebeln", "Soße", "Fladenbrot"],
-         "image_url": DREH_IMG},
+         "image_url": DREH_IMG_2},
         {"name_de": "Drehspieß-Dürüm", "name_en": "Kebab Dürüm", "price": 9.00, "category": "drehspiess",
          "description_de": "Drehspieß im gerollten Yufka-Wrap.",
          "description_en": "Kebab rolled in yufka wrap.",
          "ingredients": ["Drehspießfleisch", "Salat", "Tomaten", "Zwiebeln", "Soße", "Yufka-Wrap"],
-         "image_url": DREH_IMG_2},
+         "image_url": DREH_IMG},
         {"name_de": "Drehspieß-Box", "name_en": "Kebab Box", "price": 8.50, "category": "drehspiess",
          "description_de": "Drehspieß mit Pommes und Salat in der Box.",
          "description_en": "Kebab with fries and salad in a box.",
