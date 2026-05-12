@@ -112,7 +112,7 @@ def calculate_totals(items: List[OrderItem], order_type: str) -> Dict[str, float
     return {"subtotal": round(subtotal, 2), "delivery_fee": delivery_fee, "total": round(subtotal + delivery_fee, 2)}
 
 
-MENU_VERSION = "v16_custom_drinks_images"
+MENU_VERSION = "v17_salads_desserts_images"
 
 
 async def seed_menu():
@@ -144,24 +144,29 @@ async def seed_menu():
     SWEET_POMMES = "https://images.unsplash.com/photo-1598679253544-2c97992403ea?crop=entropy&cs=srgb&fm=jpg&q=85"
     SALAT_IMG = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?crop=entropy&cs=srgb&fm=jpg&q=85"
     SALAT_IMG_2 = "https://images.unsplash.com/photo-1540420773420-3366772f4999?crop=entropy&cs=srgb&fm=jpg&q=85"
-    AYRAN_IMG = "/images/drinks/ayran.jpg"
-    ULUDAG_IMG = "/images/drinks/uludag.jpg"
-    SPEZI_IMG = "/images/drinks/spezi.jpg"
-    COCA_COLA_033_IMG = "/images/drinks/coca-cola-033.jpg"
-    COCA_COLA_1L_IMG = "/images/drinks/coca-cola-1l.jpg"
-    COCA_COLA_ZERO_033_IMG = "/images/drinks/coca-cola-zero-033.jpg"
-    COCA_COLA_ZERO_1L_IMG = "/images/drinks/coca-cola-zero-1l.jpg"
-    FANTA_033_IMG = "/images/drinks/fanta-033.jpg"
-    FANTA_1L_IMG = "/images/drinks/fanta-1l.jpg"
-    SPRITE_033_IMG = "/images/drinks/sprite-033.jpg"
-    SPRITE_1L_IMG = "/images/drinks/sprite-1l.jpg"
-    MEZZO_MIX_033_IMG = "/images/drinks/mezzo-mix-033.jpg"
-    MEZZO_MIX_1L_IMG = "/images/drinks/mezzo-mix-1l.jpg"
-    RED_BULL_IMG = "/images/drinks/red-bull.jpg"
-    RED_BULL_ZERO_IMG = "/images/drinks/red-bull-zero.jpg"
-    CAPRI_SUN_IMG = "/images/drinks/capri-sun.jpg"
-    WATER_STILL_IMG = "/images/drinks/wasser-still.jpg"
-    WATER_SPARKLING_IMG = "/images/drinks/wasser-sprudel.jpg"
+    CAESAR_SALAD_IMG = "/images/salads/caesar-salad.jpg"
+    GREEK_SALAD_IMG = "/images/salads/greek-salad.jpg"
+    COLESLAW_IMG = "/images/salads/coleslaw.jpg"
+    BEN_JERRYS_CARAMEL_SUTRA_IMG = "/images/desserts/ben-jerrys-caramel-sutra.jpg"
+    BEN_JERRYS_COOKIE_DOUGH_IMG = "/images/desserts/ben-jerrys-cookie-dough.jpg"
+    AYRAN_IMG = "/images/drinks/ayran.webp"
+    ULUDAG_IMG = "/images/drinks/uludag.webp"
+    SPEZI_IMG = "/images/drinks/spezi.webp"
+    COCA_COLA_033_IMG = "/images/drinks/coca-cola-033.webp"
+    COCA_COLA_1L_IMG = "/images/drinks/coca-cola-1l.webp"
+    COCA_COLA_ZERO_033_IMG = "/images/drinks/coca-cola-zero-033.webp"
+    COCA_COLA_ZERO_1L_IMG = "/images/drinks/coca-cola-zero-1l.webp"
+    FANTA_033_IMG = "/images/drinks/fanta-033.webp"
+    FANTA_1L_IMG = "/images/drinks/fanta-1l.webp"
+    SPRITE_033_IMG = "/images/drinks/sprite-033.webp"
+    SPRITE_1L_IMG = "/images/drinks/sprite-1l.webp"
+    MEZZO_MIX_033_IMG = "/images/drinks/mezzo-mix-033.webp"
+    MEZZO_MIX_1L_IMG = "/images/drinks/mezzo-mix-1l.webp"
+    RED_BULL_IMG = "/images/drinks/red-bull.webp"
+    RED_BULL_ZERO_IMG = "/images/drinks/red-bull-zero.webp"
+    CAPRI_SUN_IMG = "/images/drinks/capri-sun.webp"
+    WATER_STILL_IMG = "/images/drinks/wasser-still.webp"
+    WATER_SPARKLING_IMG = "/images/drinks/wasser-sprudel.webp"
     DESSERT_CAKE = "https://images.unsplash.com/photo-1565958011703-44f9829ba187?crop=entropy&cs=srgb&fm=jpg&q=85"
     DESSERT_CHOCO = "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?crop=entropy&cs=srgb&fm=jpg&q=85"
     DESSERT_LAVA = "https://images.unsplash.com/photo-1624353365286-3f8d62daad51?crop=entropy&cs=srgb&fm=jpg&q=85"
@@ -353,17 +358,17 @@ async def seed_menu():
          "description_de": "Klassischer Caesar mit Crispy Chicken und Parmesan.",
          "description_en": "Classic Caesar with crispy chicken and parmesan.",
          "ingredients": ["Salat", "Cherrytomaten", "Croutons", "Crispy Chicken", "Parmesan", "Oregano", "Caesar Dressing"],
-         "image_url": SALAT_IMG},
+         "image_url": CAESAR_SALAD_WEBP},
         {"name_de": "Griechischer Salat", "name_en": "Greek Salad", "price": 9.00, "category": "salate",
          "description_de": "Frisch mit Feta, Oliven und Joghurtdressing.",
          "description_en": "Fresh with feta, olives and yogurt dressing.",
          "ingredients": ["Salat", "Cherrytomaten", "Gurken", "Feta-Käse", "Oliven", "Oregano", "Joghurtdressing"],
-         "image_url": SALAT_IMG_2},
+         "image_url": GREEK_SALAD_WEBP},
         {"name_de": "Coleslaw Salat", "name_en": "Coleslaw", "price": 3.50, "category": "salate",
          "description_de": "Hausgemachter Krautsalat — die perfekte Beilage.",
          "description_en": "Homemade coleslaw — the perfect side.",
          "ingredients": ["Weißkohl", "Karotten", "Joghurt", "Essig"],
-         "image_url": SALAT_IMG},
+         "image_url": COLESLAW_WEBP},
 
         # GETRÄNKE
         {"name_de": "Ayran (0,25l)", "name_en": "Ayran (0.25l)", "price": 2.00, "category": "drinks",
@@ -438,12 +443,12 @@ async def seed_menu():
          "price": 8.00, "category": "desserts",
          "description_de": "Karamell & Schokolade — Eiscreme-Klassiker.",
          "description_en": "Caramel & chocolate ice cream classic.",
-         "ingredients": [], "image_url": DESSERT_BJ},
+         "ingredients": [], "image_url": BEN_JERRYS_CARAMEL_SUTRA_WEBP},
         {"name_de": "Ben & Jerry's Cookie Dough (465ml)", "name_en": "Ben & Jerry's Cookie Dough (465ml)",
          "price": 8.00, "category": "desserts",
          "description_de": "Vanille mit Cookie-Teig-Stückchen.",
          "description_en": "Vanilla with cookie dough chunks.",
-         "ingredients": [], "image_url": DESSERT_BJ},
+         "ingredients": [], "image_url": BEN_JERRYS_COOKIE_DOUGH_WEBP},
     ]
     for it in items:
         obj = MenuItem(**it)
