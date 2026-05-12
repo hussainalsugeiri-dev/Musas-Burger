@@ -139,11 +139,7 @@ const CartSheet = () => {
                     <RadioGroupItem value="card_on_delivery" data-testid="pay-card-radio" />
                     <span>{t("pay_card_delivery")}</span>
                   </label>
-                  <label className="flex items-center gap-3 p-3 bg-[#141414] border border-white/10 rounded-lg cursor-pointer hover:border-[#F5A623]/50">
-                    <RadioGroupItem value="stripe" data-testid="pay-stripe-radio" />
-                    <span>{t("pay_online")}</span>
-                  </label>
-                </RadioGroup>
+                                 </RadioGroup>
               </div>
               <p className="text-white/40 text-xs">
                 {lang === "de" ? "Telefonische Bestellung:" : "Phone orders:"} <a href="tel:08932741934" className="text-[#F5A623]">089 32741934</a>
