@@ -112,7 +112,7 @@ def calculate_totals(items: List[OrderItem], order_type: str) -> Dict[str, float
     return {"subtotal": round(subtotal, 2), "delivery_fee": delivery_fee, "total": round(subtotal + delivery_fee, 2)}
 
 
-MENU_VERSION = "v15_pommes_style_match"
+MENU_VERSION = "v16_custom_drinks_images"
 
 
 async def seed_menu():
@@ -144,9 +144,24 @@ async def seed_menu():
     SWEET_POMMES = "https://images.unsplash.com/photo-1598679253544-2c97992403ea?crop=entropy&cs=srgb&fm=jpg&q=85"
     SALAT_IMG = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?crop=entropy&cs=srgb&fm=jpg&q=85"
     SALAT_IMG_2 = "https://images.unsplash.com/photo-1540420773420-3366772f4999?crop=entropy&cs=srgb&fm=jpg&q=85"
-    COLA_IMG = "https://images.unsplash.com/photo-1554866585-cd94860890b7?crop=entropy&cs=srgb&fm=jpg&q=85"
-    DRINK_IMG = "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?crop=entropy&cs=srgb&fm=jpg&q=85"
-    WATER_IMG = "https://images.unsplash.com/photo-1523362628745-0c100150b504?crop=entropy&cs=srgb&fm=jpg&q=85"
+    AYRAN_IMG = "/images/drinks/ayran.jpg"
+    ULUDAG_IMG = "/images/drinks/uludag.jpg"
+    SPEZI_IMG = "/images/drinks/spezi.jpg"
+    COCA_COLA_033_IMG = "/images/drinks/coca-cola-033.jpg"
+    COCA_COLA_1L_IMG = "/images/drinks/coca-cola-1l.jpg"
+    COCA_COLA_ZERO_033_IMG = "/images/drinks/coca-cola-zero-033.jpg"
+    COCA_COLA_ZERO_1L_IMG = "/images/drinks/coca-cola-zero-1l.jpg"
+    FANTA_033_IMG = "/images/drinks/fanta-033.jpg"
+    FANTA_1L_IMG = "/images/drinks/fanta-1l.jpg"
+    SPRITE_033_IMG = "/images/drinks/sprite-033.jpg"
+    SPRITE_1L_IMG = "/images/drinks/sprite-1l.jpg"
+    MEZZO_MIX_033_IMG = "/images/drinks/mezzo-mix-033.jpg"
+    MEZZO_MIX_1L_IMG = "/images/drinks/mezzo-mix-1l.jpg"
+    RED_BULL_IMG = "/images/drinks/red-bull.jpg"
+    RED_BULL_ZERO_IMG = "/images/drinks/red-bull-zero.jpg"
+    CAPRI_SUN_IMG = "/images/drinks/capri-sun.jpg"
+    WATER_STILL_IMG = "/images/drinks/wasser-still.jpg"
+    WATER_SPARKLING_IMG = "/images/drinks/wasser-sprudel.jpg"
     DESSERT_CAKE = "https://images.unsplash.com/photo-1565958011703-44f9829ba187?crop=entropy&cs=srgb&fm=jpg&q=85"
     DESSERT_CHOCO = "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?crop=entropy&cs=srgb&fm=jpg&q=85"
     DESSERT_LAVA = "https://images.unsplash.com/photo-1624353365286-3f8d62daad51?crop=entropy&cs=srgb&fm=jpg&q=85"
@@ -353,58 +368,58 @@ async def seed_menu():
         # GETRÄNKE
         {"name_de": "Ayran (0,25l)", "name_en": "Ayran (0.25l)", "price": 2.00, "category": "drinks",
          "description_de": "Erfrischender Joghurtdrink.", "description_en": "Refreshing yogurt drink.",
-         "ingredients": [], "image_url": DRINK_IMG},
+         "ingredients": [], "image_url": AYRAN_IMG},
         {"name_de": "Uludag Gazoz (0,33l)", "name_en": "Uludag Gazoz (0.33l)", "price": 2.50, "category": "drinks",
          "description_de": "Türkische Limonade.", "description_en": "Turkish soda.",
-         "ingredients": [], "image_url": DRINK_IMG},
+         "ingredients": [], "image_url": ULUDAG_IMG},
         {"name_de": "Spezi (0,33l)", "name_en": "Spezi (0.33l)", "price": 2.50, "category": "drinks",
          "description_de": "Cola-Orange Mix.", "description_en": "Cola-orange mix.",
-         "ingredients": [], "image_url": COLA_IMG},
+         "ingredients": [], "image_url": SPEZI_IMG},
         {"name_de": "Coca-Cola (0,33l)", "name_en": "Coca-Cola (0.33l)", "price": 2.50, "category": "drinks",
          "description_de": "Coca-Cola gekühlt.", "description_en": "Chilled Coca-Cola.",
-         "ingredients": [], "image_url": COLA_IMG},
+         "ingredients": [], "image_url": COCA_COLA_033_IMG},
         {"name_de": "Coca-Cola (1,0l)", "name_en": "Coca-Cola (1.0l)", "price": 3.50, "category": "drinks",
          "description_de": "Familienflasche.", "description_en": "Family bottle.",
-         "ingredients": [], "image_url": COLA_IMG},
+         "ingredients": [], "image_url": COCA_COLA_1L_IMG},
         {"name_de": "Coca-Cola Zero (0,33l)", "name_en": "Coca-Cola Zero (0.33l)", "price": 2.50, "category": "drinks",
          "description_de": "Zero Sugar.", "description_en": "Zero sugar.",
-         "ingredients": [], "image_url": COLA_IMG},
+         "ingredients": [], "image_url": COCA_COLA_ZERO_033_IMG},
         {"name_de": "Coca-Cola Zero (1,0l)", "name_en": "Coca-Cola Zero (1.0l)", "price": 3.50, "category": "drinks",
          "description_de": "Familienflasche zuckerfrei.", "description_en": "Sugar-free family bottle.",
-         "ingredients": [], "image_url": COLA_IMG},
+         "ingredients": [], "image_url": COCA_COLA_ZERO_1L_IMG},
         {"name_de": "Fanta Orange (0,33l)", "name_en": "Fanta Orange (0.33l)", "price": 2.50, "category": "drinks",
          "description_de": "Fruchtige Orangenlimo.", "description_en": "Fruity orange soda.",
-         "ingredients": [], "image_url": DRINK_IMG},
+         "ingredients": [], "image_url": FANTA_033_IMG},
         {"name_de": "Fanta Orange (1,0l)", "name_en": "Fanta Orange (1.0l)", "price": 3.50, "category": "drinks",
          "description_de": "Familienflasche.", "description_en": "Family bottle.",
-         "ingredients": [], "image_url": DRINK_IMG},
+         "ingredients": [], "image_url": FANTA_1L_IMG},
         {"name_de": "Sprite (0,33l)", "name_en": "Sprite (0.33l)", "price": 2.50, "category": "drinks",
          "description_de": "Zitronen-Limettenlimo.", "description_en": "Lemon-lime soda.",
-         "ingredients": [], "image_url": DRINK_IMG},
+         "ingredients": [], "image_url": SPRITE_033_IMG},
         {"name_de": "Sprite (1,0l)", "name_en": "Sprite (1.0l)", "price": 3.50, "category": "drinks",
          "description_de": "Familienflasche.", "description_en": "Family bottle.",
-         "ingredients": [], "image_url": DRINK_IMG},
+         "ingredients": [], "image_url": SPRITE_1L_IMG},
         {"name_de": "Mezzo Mix (0,33l)", "name_en": "Mezzo Mix (0.33l)", "price": 2.50, "category": "drinks",
          "description_de": "Cola-Orange Mix.", "description_en": "Cola-orange mix.",
-         "ingredients": [], "image_url": COLA_IMG},
+         "ingredients": [], "image_url": MEZZO_MIX_033_IMG},
         {"name_de": "Mezzo Mix (1,0l)", "name_en": "Mezzo Mix (1.0l)", "price": 3.50, "category": "drinks",
          "description_de": "Familienflasche.", "description_en": "Family bottle.",
-         "ingredients": [], "image_url": COLA_IMG},
+         "ingredients": [], "image_url": MEZZO_MIX_1L_IMG},
         {"name_de": "Red Bull (0,25l)", "name_en": "Red Bull (0.25l)", "price": 3.50, "category": "drinks",
          "description_de": "Energy zum Burger.", "description_en": "Energy for your burger.",
-         "ingredients": [], "image_url": DRINK_IMG},
+         "ingredients": [], "image_url": RED_BULL_IMG},
         {"name_de": "Red Bull Zero (0,25l)", "name_en": "Red Bull Zero (0.25l)", "price": 3.50, "category": "drinks",
          "description_de": "Zero Sugar Energy.", "description_en": "Zero sugar energy.",
-         "ingredients": [], "image_url": DRINK_IMG},
+         "ingredients": [], "image_url": RED_BULL_ZERO_IMG},
         {"name_de": "Capri-Sun (0,20l)", "name_en": "Capri-Sun (0.20l)", "price": 2.00, "category": "drinks",
          "description_de": "Fruchtsaftgetränk für Kids.", "description_en": "Fruit drink for kids.",
-         "ingredients": [], "image_url": DRINK_IMG},
+         "ingredients": [], "image_url": CAPRI_SUN_IMG},
         {"name_de": "Mineralwasser still (0,5l)", "name_en": "Still Water (0.5l)", "price": 2.50, "category": "drinks",
          "description_de": "Stilles Mineralwasser.", "description_en": "Still mineral water.",
-         "ingredients": [], "image_url": WATER_IMG},
+         "ingredients": [], "image_url": WATER_STILL_IMG},
         {"name_de": "Mineralwasser sprudel (0,5l)", "name_en": "Sparkling Water (0.5l)", "price": 2.50, "category": "drinks",
          "description_de": "Sprudelndes Mineralwasser.", "description_en": "Sparkling mineral water.",
-         "ingredients": [], "image_url": WATER_IMG},
+         "ingredients": [], "image_url": WATER_SPARKLING_IMG},
 
         # DESSERTS
         {"name_de": "Cheese Cake", "name_en": "Cheese Cake", "price": 4.00, "category": "desserts",
