@@ -112,7 +112,7 @@ def calculate_totals(items: List[OrderItem], order_type: str) -> Dict[str, float
     return {"subtotal": round(subtotal, 2), "delivery_fee": delivery_fee, "total": round(subtotal + delivery_fee, 2)}
 
 
-MENU_VERSION = "v14_sweet_pommes_final"
+MENU_VERSION = "v15_pommes_style_match"
 
 
 async def seed_menu():
@@ -140,7 +140,7 @@ async def seed_menu():
     DREH_IMG_2 = "https://images.unsplash.com/photo-1638537125835-82acb38d3531?crop=entropy&cs=srgb&fm=jpg&q=85"
     DREH_IMG_3 = "https://customer-assets.emergentagent.com/job_frisch-vom-grill/artifacts/8s1a4ndh_Download.webp"
     DREH_IMG_4 = "https://customer-assets.emergentagent.com/job_frisch-vom-grill/artifacts/yfxu1q7k_OIP%20%281%29.webp"
-    POMMES_IMG = "https://images.pexels.com/photos/31806278/pexels-photo-31806278.jpeg"
+    POMMES_IMG = "https://images.unsplash.com/photo-1518013431117-eb1465fa5752?crop=entropy&cs=srgb&fm=jpg&q=85"
     SWEET_POMMES = "https://images.unsplash.com/photo-1598679253544-2c97992403ea?crop=entropy&cs=srgb&fm=jpg&q=85"
     SALAT_IMG = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?crop=entropy&cs=srgb&fm=jpg&q=85"
     SALAT_IMG_2 = "https://images.unsplash.com/photo-1540420773420-3366772f4999?crop=entropy&cs=srgb&fm=jpg&q=85"
