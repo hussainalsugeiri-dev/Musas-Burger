@@ -112,7 +112,7 @@ def calculate_totals(items: List[OrderItem], order_type: str) -> Dict[str, float
     return {"subtotal": round(subtotal, 2), "delivery_fee": delivery_fee, "total": round(subtotal + delivery_fee, 2)}
 
 
-MENU_VERSION = "v8_chicken_final"
+MENU_VERSION = "v9_doner_and_veggie_images"
 
 
 async def seed_menu():
@@ -134,10 +134,12 @@ async def seed_menu():
     CHICKEN_IMG = "https://images.unsplash.com/photo-1606755962773-d324e0a13086?crop=entropy&cs=srgb&fm=jpg&q=85"
     CHICKEN_IMG_2 = "https://images.unsplash.com/photo-1637710847214-f91d99669e18?crop=entropy&cs=srgb&fm=jpg&q=85"
     CHICKEN_IMG_3 = "https://images.unsplash.com/photo-1671106571674-a89083d27e60?crop=entropy&cs=srgb&fm=jpg&q=85"
-    VEGGIE_IMG = "https://images.unsplash.com/photo-1585238342024-78d387f4a707?crop=entropy&cs=srgb&fm=jpg&q=85"
+    VEGGIE_IMG = "https://images.unsplash.com/photo-1585238340764-c6f1f6fe1a6d?crop=entropy&cs=srgb&fm=jpg&q=85"
     VEGGIE_IMG_2 = "https://images.unsplash.com/photo-1520072959219-c595dc870360?crop=entropy&cs=srgb&fm=jpg&q=85"
-    DREH_IMG = "https://images.unsplash.com/photo-1633321702518-7feccafb94d5?crop=entropy&cs=srgb&fm=jpg&q=85"
-    DREH_IMG_2 = "https://images.unsplash.com/photo-1561651823-34feb02250e4?crop=entropy&cs=srgb&fm=jpg&q=85"
+    DREH_IMG = "https://images.unsplash.com/photo-1699728088614-7d1d4277414b?crop=entropy&cs=srgb&fm=jpg&q=85"
+    DREH_IMG_2 = "https://images.unsplash.com/photo-1638537125835-82acb38d3531?crop=entropy&cs=srgb&fm=jpg&q=85"
+    DREH_IMG_3 = "https://images.unsplash.com/photo-1773620494884-940e0db95e46?crop=entropy&cs=srgb&fm=jpg&q=85"
+    DREH_IMG_4 = "https://images.unsplash.com/photo-1619738566066-81c6d589c80c?crop=entropy&cs=srgb&fm=jpg&q=85"
     POMMES_IMG = "https://images.pexels.com/photos/31806278/pexels-photo-31806278.jpeg"
     SWEET_POMMES = "https://images.unsplash.com/photo-1635030437364-6a51fbf3f7b1?crop=entropy&cs=srgb&fm=jpg&q=85"
     SALAT_IMG = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?crop=entropy&cs=srgb&fm=jpg&q=85"
@@ -310,12 +312,12 @@ async def seed_menu():
          "description_de": "Drehspieß mit Pommes und Salat in der Box.",
          "description_en": "Kebab with fries and salad in a box.",
          "ingredients": ["Drehspießfleisch", "Pommes", "Salat", "Soße"],
-         "image_url": DREH_IMG},
+         "image_url": DREH_IMG_3},
         {"name_de": "Drehspieß-Teller", "name_en": "Kebab Plate", "price": 11.50, "category": "drehspiess",
          "description_de": "Großer Teller mit Drehspieß, Pommes und Salat.",
          "description_en": "Large plate with kebab, fries and salad.",
          "ingredients": ["Drehspießfleisch", "Pommes", "Salat", "Soße"],
-         "image_url": DREH_IMG_2},
+         "image_url": DREH_IMG_4},
 
         # POMMES
         {"name_de": "Pommes Frites (klein)", "name_en": "French Fries (small)", "price": 3.50, "category": "pommes",
