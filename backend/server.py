@@ -4,6 +4,8 @@ from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
+import asyncio
+import requests
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional, Dict
@@ -100,7 +102,72 @@ def calculate_totals(items: List[OrderItem], order_type: str) -> Dict[str, float
     delivery_fee = 2.50 if order_type in ("delivery", "contactless") and subtotal < 25 else 0.0
     return {"subtotal": round(subtotal, 2), "delivery_fee": delivery_fee, "total": round(subtotal + delivery_fee, 2)}
 
+def format_order_type(order_type: str) -> str:
+    return {
+        "delivery": "Lieferung",
+        "pickup": "Abholung",
+        "contactless": "Kontaktlose Lieferung",
+    }.get(order_type, order_type)
 
+
+def format_payment_method(payment_method: str) -> str:
+    return {
+        "cash": "Barzahlung",
+        "card_on_delivery": "Kartenzahlung bei Abholung/Lieferung",
+    }.get(payment_method, payment_method)
+
+
+async def send_telegram_order_notification(order: Order):
+    token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+
+    if not token or not chat_id:
+        return
+
+    items_text = []
+    for item in order.items:
+        line = f"{item.quantity}x {item.name} — {item.price:.2f} €"
+        if item.extras:
+            line += f" | Extras: {', '.join(item.extras)}"
+        items_text.append(line)
+
+    message = "\n".join([
+        "🍔 NEUE BESTELLUNG BEI MUSA'S BURGER!",
+        "",
+        f"Bestellart: {format_order_type(order.order_type)}",
+        f"Zahlung: {format_payment_method(order.payment_method)}",
+        "",
+        f"Name: {order.customer_name}",
+        f"Telefon: {order.customer_phone}",
+        f"Adresse: {order.delivery_address or 'Keine Adresse / Abholung'}",
+        "",
+        "Artikel:",
+        *items_text,
+        "",
+        f"Zwischensumme: {order.subtotal:.2f} €",
+        f"Liefergebühr: {order.delivery_fee:.2f} €",
+        f"Gesamt: {order.total:.2f} €",
+        "",
+        f"Notiz: {order.notes or 'Keine Notiz'}",
+        "",
+        "Bitte im Adminbereich prüfen."
+    ])
+
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+
+    try:
+        response = await asyncio.to_thread(
+            requests.post,
+            url,
+            json={"chat_id": chat_id, "text": message},
+            timeout=10
+        )
+
+        if not response.ok:
+            logging.getLogger(__name__).error("Telegram notification failed: %s", response.text)
+
+    except Exception as e:
+        logging.getLogger(__name__).error("Telegram notification error: %s", e)
 MENU_VERSION = "v21_fix_remaining_images"
 
 
@@ -530,7 +597,7 @@ async def create_order(payload: OrderCreate, http_request: Request):
     doc = order.model_dump()
     await db.orders.insert_one(doc)
 
-   
+   asyncio.create_task(send_telegram_order_notification(order))
 
     return order
 
