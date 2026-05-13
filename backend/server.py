@@ -347,17 +347,17 @@ async def seed_menu():
          "description_de": "Klassischer Caesar mit Crispy Chicken und Parmesan.",
          "description_en": "Classic Caesar with crispy chicken and parmesan.",
          "ingredients": ["Salat", "Cherrytomaten", "Croutons", "Crispy Chicken", "Parmesan", "Oregano", "Caesar Dressing"],
-         "image_url": CAESAR_SALAD_WEBP},
+         "image_url": CAESAR_SALAD_IMG},
         {"name_de": "Griechischer Salat", "name_en": "Greek Salad", "price": 9.00, "category": "salate",
          "description_de": "Frisch mit Feta, Oliven und Joghurtdressing.",
          "description_en": "Fresh with feta, olives and yogurt dressing.",
          "ingredients": ["Salat", "Cherrytomaten", "Gurken", "Feta-Käse", "Oliven", "Oregano", "Joghurtdressing"],
-         "image_url": GREEK_SALAD_WEBP},
+         "image_url": GREEK_SALAD_IMG},
         {"name_de": "Coleslaw Salat", "name_en": "Coleslaw", "price": 3.50, "category": "salate",
          "description_de": "Hausgemachter Krautsalat — die perfekte Beilage.",
          "description_en": "Homemade coleslaw — the perfect side.",
          "ingredients": ["Weißkohl", "Karotten", "Joghurt", "Essig"],
-         "image_url": COLESLAW_WEBP},
+         "image_url": COLESLAW_IMG},
 
         # GETRÄNKE
         {"name_de": "Ayran (0,25l)", "name_en": "Ayran (0.25l)", "price": 2.00, "category": "drinks",
@@ -432,12 +432,12 @@ async def seed_menu():
          "price": 8.00, "category": "desserts",
          "description_de": "Karamell & Schokolade — Eiscreme-Klassiker.",
          "description_en": "Caramel & chocolate ice cream classic.",
-         "ingredients": [], "image_url": BEN_JERRYS_CARAMEL_SUTRA_WEBP},
+         "ingredients": [], "image_url": BEN_JERRYS_CARAMEL_SUTRA_IMG},
         {"name_de": "Ben & Jerry's Cookie Dough (465ml)", "name_en": "Ben & Jerry's Cookie Dough (465ml)",
          "price": 8.00, "category": "desserts",
          "description_de": "Vanille mit Cookie-Teig-Stückchen.",
          "description_en": "Vanilla with cookie dough chunks.",
-         "ingredients": [], "image_url": BEN_JERRYS_COOKIE_DOUGH_WEBP},
+         "ingredients": [], "image_url": BEN_JERRYS_COOKIE_DOUGH_IMG},
     ]
     for it in items:
         obj = MenuItem(**it)
