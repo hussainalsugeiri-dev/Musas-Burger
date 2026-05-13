@@ -101,7 +101,7 @@ def calculate_totals(items: List[OrderItem], order_type: str) -> Dict[str, float
     return {"subtotal": round(subtotal, 2), "delivery_fee": delivery_fee, "total": round(subtotal + delivery_fee, 2)}
 
 
-MENU_VERSION = "v17_salads_desserts_images"
+MENU_VERSION = "v21_fix_remaining_images"
 
 
 async def seed_menu():
@@ -133,11 +133,11 @@ async def seed_menu():
     SWEET_POMMES = "https://images.unsplash.com/photo-1598679253544-2c97992403ea?crop=entropy&cs=srgb&fm=jpg&q=85"
     SALAT_IMG = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?crop=entropy&cs=srgb&fm=jpg&q=85"
     SALAT_IMG_2 = "https://images.unsplash.com/photo-1540420773420-3366772f4999?crop=entropy&cs=srgb&fm=jpg&q=85"
-    CAESAR_SALAD_IMG = "/images/salads/caesar-salad.jpg"
-    GREEK_SALAD_IMG = "/images/salads/greek-salad.jpg"
-    COLESLAW_IMG = "/images/salads/coleslaw.jpg"
-    BEN_JERRYS_CARAMEL_SUTRA_IMG = "/images/desserts/ben-jerrys-caramel-sutra.jpg"
-    BEN_JERRYS_COOKIE_DOUGH_IMG = "/images/desserts/ben-jerrys-cookie-dough.jpg"
+    CAESAR_SALAD_IMG = "/images/salads/caesar-salad.webp"
+    GREEK_SALAD_IMG = "/images/salads/greek-salad.webp"
+    COLESLAW_IMG = "/images/salads/coleslaw.webp"
+    BEN_JERRYS_CARAMEL_SUTRA_IMG = "/images/desserts/ben-jerrys-caramel-sutra.webp"
+    BEN_JERRYS_COOKIE_DOUGH_IMG = "/images/desserts/ben-jerrys-cookie-dough.webp"
     AYRAN_IMG = "/images/drinks/ayran.webp"
     ULUDAG_IMG = "/images/drinks/uludag.webp"
     SPEZI_IMG = "/images/drinks/spezi.webp"
