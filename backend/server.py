@@ -10,22 +10,12 @@ from typing import List, Optional, Dict
 import uuid
 from datetime import datetime, timezone
 
-from emergentintegrations.payments.stripe.checkout import (
-    StripeCheckout,
-    CheckoutSessionResponse,
-    CheckoutStatusResponse,
-    CheckoutSessionRequest,
-)
-
-
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
-
-STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY', 'sk_test_emergent')
 
 app = FastAPI(title="Musa's Burger API")
 api_router = APIRouter(prefix="/api")
@@ -76,7 +66,7 @@ class OrderCreate(BaseModel):
     customer_email: Optional[str] = None
     delivery_address: Optional[str] = None
     notes: Optional[str] = None
-    payment_method: str  # cash, card_on_delivery, stripe
+    payment_method: str  # cash, card_on_delivery
     origin_url: str
 
 
@@ -96,7 +86,6 @@ class Order(BaseModel):
     subtotal: float
     delivery_fee: float = 0.0
     total: float
-    stripe_session_id: Optional[str] = None
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
@@ -541,34 +530,7 @@ async def create_order(payload: OrderCreate, http_request: Request):
     doc = order.model_dump()
     await db.orders.insert_one(doc)
 
-    # If stripe, create checkout session
-    if payload.payment_method == "stripe":
-        host_url = str(http_request.base_url).rstrip("/")
-        webhook_url = f"{host_url}/api/webhook/stripe"
-        stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
-        success_url = f"{payload.origin_url}/success?session_id={{CHECKOUT_SESSION_ID}}"
-        cancel_url = f"{payload.origin_url}/cancel"
-        checkout_req = CheckoutSessionRequest(
-            amount=float(order.total),
-            currency="eur",
-            success_url=success_url,
-            cancel_url=cancel_url,
-            metadata={"order_id": order.id, "source": "musas_burger"},
-        )
-        session: CheckoutSessionResponse = await stripe_checkout.create_checkout_session(checkout_req)
-        await db.payment_transactions.insert_one({
-            "id": str(uuid.uuid4()),
-            "order_id": order.id,
-            "session_id": session.session_id,
-            "amount": order.total,
-            "currency": "eur",
-            "payment_status": "initiated",
-            "status": "open",
-            "metadata": {"order_id": order.id},
-            "created_at": datetime.now(timezone.utc).isoformat(),
-        })
-        await db.orders.update_one({"id": order.id}, {"$set": {"stripe_session_id": session.session_id}})
-        order.stripe_session_id = session.session_id
+   
 
     return order
 
@@ -598,113 +560,7 @@ async def update_order_status(order_id: str, status: str):
     return {"success": True, "status": status}
 
 
-# ============ STRIPE PAYMENT ENDPOINTS ============
-@api_router.post("/payments/checkout/session")
-async def create_checkout_session(payload: CheckoutRequest, http_request: Request):
-    order = await db.orders.find_one({"id": payload.order_id}, {"_id": 0})
-    if not order:
-        raise HTTPException(status_code=404, detail="Order not found")
-    host_url = str(http_request.base_url).rstrip("/")
-    webhook_url = f"{host_url}/api/webhook/stripe"
-    stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
-    success_url = f"{payload.origin_url}/success?session_id={{CHECKOUT_SESSION_ID}}"
-    cancel_url = f"{payload.origin_url}/cancel"
-    checkout_req = CheckoutSessionRequest(
-        amount=float(order["total"]),
-        currency="eur",
-        success_url=success_url,
-        cancel_url=cancel_url,
-        metadata={"order_id": order["id"], "source": "musas_burger"},
-    )
-    session: CheckoutSessionResponse = await stripe_checkout.create_checkout_session(checkout_req)
-    await db.payment_transactions.insert_one({
-        "id": str(uuid.uuid4()),
-        "order_id": order["id"],
-        "session_id": session.session_id,
-        "amount": order["total"],
-        "currency": "eur",
-        "payment_status": "initiated",
-        "status": "open",
-        "metadata": {"order_id": order["id"]},
-        "created_at": datetime.now(timezone.utc).isoformat(),
-    })
-    await db.orders.update_one({"id": order["id"]}, {"$set": {"stripe_session_id": session.session_id}})
-    return {"url": session.url, "session_id": session.session_id}
 
-
-@api_router.get("/payments/checkout/status/{session_id}")
-async def get_checkout_status(session_id: str, http_request: Request):
-    host_url = str(http_request.base_url).rstrip("/")
-    webhook_url = f"{host_url}/api/webhook/stripe"
-    stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
-    try:
-        status: CheckoutStatusResponse = await stripe_checkout.get_checkout_status(session_id)
-    except Exception as e:
-        logger.warning(f"Stripe status lookup failed for {session_id}: {e}")
-        # Fallback: read our local transaction record
-        tx = await db.payment_transactions.find_one({"session_id": session_id}, {"_id": 0})
-        if not tx:
-            raise HTTPException(status_code=404, detail="Session not found")
-        return {
-            "status": tx.get("status", "open"),
-            "payment_status": tx.get("payment_status", "pending"),
-            "amount_total": int(round(float(tx.get("amount", 0)) * 100)),
-            "currency": tx.get("currency", "eur"),
-            "metadata": tx.get("metadata", {}),
-        }
-    # Idempotent update
-    tx = await db.payment_transactions.find_one({"session_id": session_id}, {"_id": 0})
-    if tx and tx.get("payment_status") != "paid" and status.payment_status == "paid":
-        await db.payment_transactions.update_one(
-            {"session_id": session_id},
-            {"$set": {"payment_status": status.payment_status, "status": status.status}},
-        )
-        order_id = status.metadata.get("order_id") if status.metadata else None
-        if order_id:
-            await db.orders.update_one({"id": order_id}, {"$set": {"payment_status": "paid"}})
-    elif tx:
-        await db.payment_transactions.update_one(
-            {"session_id": session_id},
-            {"$set": {"payment_status": status.payment_status, "status": status.status}},
-        )
-    return {
-        "status": status.status,
-        "payment_status": status.payment_status,
-        "amount_total": status.amount_total,
-        "currency": status.currency,
-        "metadata": status.metadata,
-    }
-
-
-@api_router.post("/webhook/stripe")
-async def stripe_webhook(request: Request):
-    body = await request.body()
-    sig = request.headers.get("Stripe-Signature", "")
-    host_url = str(request.base_url).rstrip("/")
-    webhook_url = f"{host_url}/api/webhook/stripe"
-    stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
-    try:
-        evt = await stripe_checkout.handle_webhook(body, sig)
-        if evt.payment_status == "paid" and evt.session_id:
-            tx = await db.payment_transactions.find_one({"session_id": evt.session_id}, {"_id": 0})
-            if tx and tx.get("payment_status") != "paid":
-                await db.payment_transactions.update_one(
-                    {"session_id": evt.session_id},
-                    {"$set": {"payment_status": "paid", "status": "complete"}},
-                )
-                order_id = evt.metadata.get("order_id") if evt.metadata else None
-                if order_id:
-                    await db.orders.update_one({"id": order_id}, {"$set": {"payment_status": "paid"}})
-        return {"received": True}
-    except Exception as e:
-        logger.error(f"Webhook error: {e}")
-        return {"received": False, "error": str(e)}
-
-
-# ============ HEALTH ============
-@api_router.get("/")
-async def root():
-    return {"message": "Musa's Burger API", "version": "1.0"}
 
 
 # Configure logging
