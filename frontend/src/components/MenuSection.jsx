@@ -55,6 +55,18 @@ const MenuSection = () => {
               </TabsTrigger>
             ))}
           </TabsList>
+		  
+		  <div className="mb-8 rounded-2xl border-2 border-[#F5A623] bg-[#F5A623]/10 p-5 text-center shadow-lg">
+  <p className="text-[#F5A623] font-black uppercase tracking-wide text-lg md:text-xl">
+    Wichtiger Hinweis zu den Burger-Bildern
+  </p>
+  <p className="text-white font-bold text-base md:text-lg mt-2">
+    Die Burger-Bilder sind nur Beispielbilder. Der echte Burger kann anders aussehen.
+  </p>
+  <p className="text-white/70 text-sm mt-1">
+    Verbindlich sind Name, Preis, Beschreibung und Zutaten — nicht das Foto.
+  </p>
+</div>
 
           {categories.map((c) => (
             <TabsContent key={c} value={c} className="mt-0">
