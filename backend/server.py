@@ -154,7 +154,7 @@ async def seed_menu():
     RED_BULL_IMG = "/images/drinks/red-bull.webp"
     RED_BULL_ZERO_IMG = "/images/drinks/red-bull-zero.webp"
     CAPRI_SUN_IMG = "/images/drinks/capri-sun.webp"
-    WATER_STILL_IMG = "/images/drinks/wasser-still.png"
+    WATER_STILL_IMG = "/images/drinks/wasser-still.webp"
     WATER_SPARKLING_IMG = "/images/drinks/wasser-sprudel.webp"
     DESSERT_CAKE = "https://images.unsplash.com/photo-1565958011703-44f9829ba187?crop=entropy&cs=srgb&fm=jpg&q=85"
     DESSERT_CHOCO = "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?crop=entropy&cs=srgb&fm=jpg&q=85"
