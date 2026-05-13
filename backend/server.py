@@ -594,10 +594,10 @@ async def create_order(payload: OrderCreate, http_request: Request):
         delivery_fee=totals["delivery_fee"],
         total=totals["total"],
     )
-    doc = order.model_dump()
+        doc = order.model_dump()
     await db.orders.insert_one(doc)
 
-   asyncio.create_task(send_telegram_order_notification(order))
+    asyncio.create_task(send_telegram_order_notification(order))
 
     return order
 
