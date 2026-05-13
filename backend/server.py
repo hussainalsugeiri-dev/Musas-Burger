@@ -561,7 +561,14 @@ async def update_order_status(order_id: str, status: str):
 
 
 
+# ============ HEALTH ============
+@api_router.get("/")
+async def root():
+    return {"message": "Musa's Burger API", "version": "1.0"}
 
+@app.get("/")
+async def health():
+    return {"message": "Musa's Burger API", "version": "1.0"}
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
