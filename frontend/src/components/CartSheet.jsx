@@ -140,6 +140,10 @@ const CartSheet = () => {
 				  <p className="mt-3 text-sm text-white/70 leading-relaxed">
                    Bei Lieferung ist aktuell nur Barzahlung möglich. Kartenzahlung bieten wir direkt im Restaurant bei Abholung an.
                   </p>
+				  
+				  <p className="mt-3 text-xs text-white/50 leading-relaxed">
+                   Mit dem Absenden bestätigst du, dass deine Angaben korrekt sind. Fake- oder Spaßbestellungen können blockiert werden. Größere Bestellungen werden telefonisch bestätigt.
+                  </p>
 								 
               </div>
               <p className="text-white/40 text-xs">

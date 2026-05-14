@@ -124,6 +124,12 @@ async def send_telegram_order_notification(order: Order):
     if not token or not chat_id:
         return
 
+    total_quantity = sum(item.quantity for item in order.items)
+    warning = ""
+
+    if order.total >= 50 or total_quantity >= 8:
+        warning = "⚠️ GROẞE BESTELLUNG – bitte telefonisch bestätigen!\n\n"
+
     items_text = []
     for item in order.items:
         line = f"{item.quantity}x {item.name} — {item.price:.2f} €"
@@ -131,7 +137,7 @@ async def send_telegram_order_notification(order: Order):
             line += f" | Extras: {', '.join(item.extras)}"
         items_text.append(line)
 
-    message = "\n".join([
+    message = warning + "\n".join([
         "🍔 NEUE BESTELLUNG BEI MUSA'S BURGER!",
         "",
         f"Bestellart: {format_order_type(order.order_type)}",
