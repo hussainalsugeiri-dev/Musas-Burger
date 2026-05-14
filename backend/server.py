@@ -565,8 +565,15 @@ async def create_order(payload: OrderCreate, http_request: Request):
     # Validate items
     if not payload.items or len(payload.items) == 0:
         raise HTTPException(status_code=400, detail="Order must contain at least one item")
+            # Anti-abuse: limit quantity per item
+    for item in payload.items:
+        if item.quantity > 5:
+            raise HTTPException(
+                status_code=400,
+                detail="Maximal 5 Stück pro Produkt online bestellbar. Für größere Mengen bitte telefonisch bestellen."
+            )
     # Validate delivery requires address
-    if payload.order_type in ("delivery", "contactless") and not payload.delivery_address:
+    if payload.order_type == "delivery" and not payload.delivery_address:
         raise HTTPException(status_code=400, detail="Delivery address is required for delivery orders")
     # Validate items against DB to prevent price manipulation
     validated_items: List[OrderItem] = []
@@ -582,6 +589,14 @@ async def create_order(payload: OrderCreate, http_request: Request):
             extras=it.extras,
         ))
     totals = calculate_totals(validated_items, payload.order_type)
+    
+        # Minimum order value for delivery
+    if payload.order_type == "delivery" and totals["subtotal"] < 15:
+        raise HTTPException(
+            status_code=400,
+            detail="Der Mindestbestellwert für Lieferung beträgt 15 €."
+        )
+    
     order = Order(
         items=validated_items,
         order_type=payload.order_type,
@@ -595,7 +610,37 @@ async def create_order(payload: OrderCreate, http_request: Request):
         delivery_fee=totals["delivery_fee"],
         total=totals["total"],
     )
+    
+        # Anti-spam: limit repeated orders by phone and IP
+    client_ip = http_request.client.host if http_request.client else "unknown"
+    thirty_minutes_ago = datetime.now(timezone.utc).timestamp() - 1800
+
+    recent_phone_orders = await db.orders.count_documents({
+        "customer_phone": payload.customer_phone,
+        "created_timestamp": {"$gte": thirty_minutes_ago}
+    })
+
+    if recent_phone_orders >= 3:
+        raise HTTPException(
+            status_code=429,
+            detail="Zu viele Bestellungen mit dieser Telefonnummer. Bitte telefonisch bestellen."
+        )
+
+    recent_ip_orders = await db.orders.count_documents({
+        "client_ip": client_ip,
+        "created_timestamp": {"$gte": thirty_minutes_ago}
+    })
+
+    if recent_ip_orders >= 5:
+        raise HTTPException(
+            status_code=429,
+            detail="Zu viele Bestellungen in kurzer Zeit. Bitte später erneut versuchen oder telefonisch bestellen."
+        )
+
     doc = order.model_dump()
+    doc["client_ip"] = client_ip
+    doc["created_timestamp"] = datetime.now(timezone.utc).timestamp()
+
     await db.orders.insert_one(doc)
 
     asyncio.create_task(send_telegram_order_notification(order))
