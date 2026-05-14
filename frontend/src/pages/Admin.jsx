@@ -46,7 +46,12 @@ const handleLogout = () => {
 
   const loadData = async () => {
     try {
-      const [ord, m] = await Promise.all([axios.get(`${API}/orders`), axios.get(`${API}/menu`)]);
+      const [ord, m] = await Promise.all([
+  axios.get(`${API}/orders`, {
+    headers: { "X-Admin-Token": process.env.REACT_APP_ADMIN_API_TOKEN }
+  }),
+  axios.get(`${API}/menu`)
+]);
       setOrders(ord.data);
       setMenu(m.data);
     } catch (e) {
@@ -67,7 +72,9 @@ const handleLogout = () => {
 
   const updateStatus = async (orderId, status) => {
     try {
-      await axios.put(`${API}/orders/${orderId}/status?status=${status}`);
+      await axios.put(`${API}/orders/${orderId}/status?status=${status}`, null, {
+  headers: { "X-Admin-Token": process.env.REACT_APP_ADMIN_API_TOKEN }
+});
       toast.success("Status aktualisiert");
       loadData();
     } catch {

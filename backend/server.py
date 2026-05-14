@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Request
+from fastapi import FastAPI, APIRouter, HTTPException, Request, Header
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -97,23 +97,31 @@ class CheckoutRequest(BaseModel):
 
 
 # ============ HELPERS ============
+
+def verify_admin_token(x_admin_token: Optional[str]):
+    expected_token = os.environ.get("ADMIN_API_TOKEN")
+
+    if not expected_token:
+        raise HTTPException(status_code=500, detail="Admin token is not configured")
+
+    if x_admin_token != expected_token:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
 def calculate_totals(items: List[OrderItem], order_type: str) -> Dict[str, float]:
     subtotal = sum(i.price * i.quantity for i in items)
-    delivery_fee = 2.50 if order_type in ("delivery", "contactless") and subtotal < 25 else 0.0
+    delivery_fee = 3.00 if order_type == "delivery" and subtotal < 25 else 0.0
     return {"subtotal": round(subtotal, 2), "delivery_fee": delivery_fee, "total": round(subtotal + delivery_fee, 2)}
 
 def format_order_type(order_type: str) -> str:
     return {
         "delivery": "Lieferung",
         "pickup": "Abholung",
-        "contactless": "Kontaktlose Lieferung",
     }.get(order_type, order_type)
 
 
 def format_payment_method(payment_method: str) -> str:
     return {
         "cash": "Barzahlung",
-        "card_on_delivery": "Kartenzahlung bei Abholung/Lieferung",
     }.get(payment_method, payment_method)
 
 
@@ -655,13 +663,17 @@ async def create_order(payload: OrderCreate, http_request: Request):
 
 
 @api_router.get("/orders", response_model=List[Order])
-async def get_orders():
+async def get_orders(x_admin_token: Optional[str] = Header(default=None)):
+    verify_admin_token(x_admin_token)
+
     orders = await db.orders.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
     return orders
 
 
 @api_router.get("/orders/{order_id}", response_model=Order)
-async def get_order(order_id: str):
+async def get_order(order_id: str, x_admin_token: Optional[str] = Header(default=None)):
+    verify_admin_token(x_admin_token)
+
     order = await db.orders.find_one({"id": order_id}, {"_id": 0})
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
@@ -669,7 +681,9 @@ async def get_order(order_id: str):
 
 
 @api_router.put("/orders/{order_id}/status")
-async def update_order_status(order_id: str, status: str):
+async def update_order_status(order_id: str, status: str, x_admin_token: Optional[str] = Header(default=None)):
+    verify_admin_token(x_admin_token)
+
     valid = ["received", "preparing", "ready", "delivered", "cancelled"]
     if status not in valid:
         raise HTTPException(status_code=400, detail="Invalid status")
