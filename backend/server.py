@@ -139,6 +139,7 @@ async def send_telegram_order_notification(order: Order):
         "",
         f"Name: {order.customer_name}",
         f"Telefon: {order.customer_phone}",
+        f"E-Mail: {order.customer_email or 'Keine E-Mail angegeben'}",
         f"Adresse: {order.delivery_address or 'Keine Adresse / Abholung'}",
         "",
         "Artikel:",
