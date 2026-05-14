@@ -1,5 +1,5 @@
 import React from "react";
-import { Truck, ShoppingBag, ShieldCheck, ArrowRight } from "lucide-react";
+import { Truck, ShoppingBag, ArrowRight } from "lucide-react";
 import { useI18n } from "@/i18n";
 import { useCart } from "@/cart";
 
@@ -10,7 +10,6 @@ const OrderSection = () => {
   const options = [
     { id: "delivery", icon: Truck, label: t("order_type_delivery"), desc: "30–45 min" },
     { id: "pickup", icon: ShoppingBag, label: t("order_type_pickup"), desc: "15–20 min" },
-    { id: "contactless", icon: ShieldCheck, label: t("order_type_contactless"), desc: "Sicher & einfach" },
   ];
 
   return (
