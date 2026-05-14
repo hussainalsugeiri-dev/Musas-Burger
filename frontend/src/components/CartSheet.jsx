@@ -32,7 +32,7 @@ const CartSheet = () => {
       toast.error(lang === "de" ? "Name und Telefon sind erforderlich" : "Name and phone are required");
       return;
     }
-    if ((orderType === "delivery" || orderType === "contactless") && !form.delivery_address) {
+    if (orderType === "delivery" && !form.delivery_address) { 
       toast.error(lang === "de" ? "Lieferadresse erforderlich" : "Delivery address required");
       return;
     }
@@ -118,7 +118,7 @@ const CartSheet = () => {
                 <Label className="text-white/70 text-sm">{t("checkout_email")}</Label>
                 <Input type="email" value={form.customer_email} onChange={(e) => setForm({ ...form, customer_email: e.target.value })} className="bg-[#141414] border-white/10 mt-1" data-testid="checkout-email-input" />
               </div>
-              {(orderType === "delivery" || orderType === "contactless") && (
+              {orderType === "delivery" && (
                 <div>
                   <Label className="text-white/70 text-sm">{t("address_label")} *</Label>
                   <Input value={form.delivery_address} onChange={(e) => setForm({ ...form, delivery_address: e.target.value })} placeholder={t("address_placeholder")} className="bg-[#141414] border-white/10 mt-1" required data-testid="checkout-address-input" />
@@ -135,11 +135,12 @@ const CartSheet = () => {
                     <RadioGroupItem value="cash" data-testid="pay-cash-radio" />
                     <span>{t("pay_cash")}</span>
                   </label>
-                  <label className="flex items-center gap-3 p-3 bg-[#141414] border border-white/10 rounded-lg cursor-pointer hover:border-[#F5A623]/50">
-                    <RadioGroupItem value="card_on_delivery" data-testid="pay-card-radio" />
-                    <span>{t("pay_card_delivery")}</span>
-                  </label>
-                                 </RadioGroup>
+          
+                  </RadioGroup>
+				  <p className="mt-3 text-sm text-white/70 leading-relaxed">
+                   Bei Lieferung ist aktuell nur Barzahlung möglich. Kartenzahlung bieten wir direkt im Restaurant bei Abholung an.
+                  </p>
+								 
               </div>
               <p className="text-white/40 text-xs">
                 {lang === "de" ? "Telefonische Bestellung:" : "Phone orders:"} <a href="tel:08932741934" className="text-[#F5A623]">089 32741934</a>
