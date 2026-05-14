@@ -22,6 +22,27 @@ const Admin = () => {
   const [orders, setOrders] = useState([]);
   const [menu, setMenu] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [password, setPassword] = useState("");
+const [isAuthenticated, setIsAuthenticated] = useState(
+  localStorage.getItem("musas_admin_authenticated") === "true"
+);
+
+const handleLogin = (e) => {
+  e.preventDefault();
+
+  if (password === process.env.REACT_APP_ADMIN_PASSWORD) {
+    localStorage.setItem("musas_admin_authenticated", "true");
+    setIsAuthenticated(true);
+  } else {
+    toast.error("Falsches Admin-Passwort");
+  }
+};
+
+const handleLogout = () => {
+  localStorage.removeItem("musas_admin_authenticated");
+  setIsAuthenticated(false);
+  setPassword("");
+};
 
   const loadData = async () => {
     try {
@@ -36,10 +57,43 @@ const Admin = () => {
   };
 
   useEffect(() => {
-    loadData();
-    const id = setInterval(loadData, 15000);
-    return () => clearInterval(id);
-  }, []);
+  if (!isAuthenticated) return;
+
+  loadData();
+  const id = setInterval(loadData, 15000);
+  return () => clearInterval(id);
+}, [isAuthenticated]);
+if (!isAuthenticated) {
+  return (
+    <div className="min-h-screen bg-[#0E0E0E] text-white flex items-center justify-center p-6">
+      <form
+        onSubmit={handleLogin}
+        className="bg-[#141414] border border-white/10 rounded-2xl p-6 w-full max-w-sm shadow-2xl"
+      >
+        <h1 className="text-3xl font-bold mb-2">Admin Login</h1>
+        <p className="text-white/60 mb-6">
+          Bitte Admin-Passwort eingeben, um Bestellungen zu sehen.
+        </p>
+
+        <input
+          type="password"
+          placeholder="Admin-Passwort"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full bg-black border border-white/10 rounded-lg p-3 mb-4 outline-none focus:border-[#F5A623]"
+        />
+
+        <Button type="submit" className="w-full bg-[#F5A623] text-black font-bold hover:bg-[#F5A623]/90">
+          Einloggen
+        </Button>
+
+        <Link to="/" className="block text-center text-white/50 text-sm mt-4 hover:text-white">
+          Zurück zur Website
+        </Link>
+      </form>
+    </div>
+  );
+}
 
   const updateStatus = async (orderId, status) => {
     try {
