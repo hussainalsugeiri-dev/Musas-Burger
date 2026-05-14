@@ -63,6 +63,30 @@ const handleLogout = () => {
   const id = setInterval(loadData, 15000);
   return () => clearInterval(id);
 }, [isAuthenticated]);
+
+
+  const updateStatus = async (orderId, status) => {
+    try {
+      await axios.put(`${API}/orders/${orderId}/status?status=${status}`);
+      toast.success("Status aktualisiert");
+      loadData();
+    } catch {
+      toast.error("Fehler");
+    }
+  };
+
+  const toggleAvailable = async (item) => {
+    try {
+      await axios.put(`${API}/menu/${item.id}`, { ...item, available: !item.available });
+      toast.success("Aktualisiert");
+      loadData();
+    } catch {
+      toast.error("Fehler");
+    }
+  };
+
+  useEffect(() => { document.title = "Admin · Musa's Burger"; }, []);
+
 if (!isAuthenticated) {
   return (
     <div className="min-h-screen bg-[#0E0E0E] text-white flex items-center justify-center p-6">
@@ -94,28 +118,6 @@ if (!isAuthenticated) {
     </div>
   );
 }
-
-  const updateStatus = async (orderId, status) => {
-    try {
-      await axios.put(`${API}/orders/${orderId}/status?status=${status}`);
-      toast.success("Status aktualisiert");
-      loadData();
-    } catch {
-      toast.error("Fehler");
-    }
-  };
-
-  const toggleAvailable = async (item) => {
-    try {
-      await axios.put(`${API}/menu/${item.id}`, { ...item, available: !item.available });
-      toast.success("Aktualisiert");
-      loadData();
-    } catch {
-      toast.error("Fehler");
-    }
-  };
-
-  useEffect(() => { document.title = "Admin · Musa's Burger"; }, []);
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white pb-12">
