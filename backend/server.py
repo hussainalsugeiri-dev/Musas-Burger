@@ -549,14 +549,25 @@ async def get_menu_item(item_id: str):
 
 
 @api_router.post("/menu", response_model=MenuItem)
-async def create_menu_item(payload: MenuItemCreate):
+async def create_menu_item(
+    payload: MenuItemCreate,
+    x_admin_token: Optional[str] = Header(default=None)
+):
+    verify_admin_token(x_admin_token)
+
     obj = MenuItem(**payload.model_dump())
     await db.menu_items.insert_one(obj.model_dump())
     return obj
 
 
 @api_router.put("/menu/{item_id}", response_model=MenuItem)
-async def update_menu_item(item_id: str, payload: MenuItemCreate):
+async def update_menu_item(
+    item_id: str,
+    payload: MenuItemCreate,
+    x_admin_token: Optional[str] = Header(default=None)
+):
+    verify_admin_token(x_admin_token)
+
     update_data = payload.model_dump()
     result = await db.menu_items.update_one({"id": item_id}, {"$set": update_data})
     if result.matched_count == 0:
@@ -566,7 +577,12 @@ async def update_menu_item(item_id: str, payload: MenuItemCreate):
 
 
 @api_router.delete("/menu/{item_id}")
-async def delete_menu_item(item_id: str):
+async def delete_menu_item(
+    item_id: str,
+    x_admin_token: Optional[str] = Header(default=None)
+):
+    verify_admin_token(x_admin_token)
+
     result = await db.menu_items.delete_one({"id": item_id})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Item not found")

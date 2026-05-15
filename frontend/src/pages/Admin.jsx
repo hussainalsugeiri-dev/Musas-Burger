@@ -84,7 +84,9 @@ const handleLogout = () => {
 
   const toggleAvailable = async (item) => {
     try {
-      await axios.put(`${API}/menu/${item.id}`, { ...item, available: !item.available });
+await axios.put(`${API}/menu/${item.id}`, { ...item, available: !item.available }, {
+  headers: { "X-Admin-Token": process.env.REACT_APP_ADMIN_API_TOKEN }
+});
       toast.success("Aktualisiert");
       loadData();
     } catch {
